@@ -6,7 +6,7 @@ name: deploy_automation
 # events but only for the master branch
 on: 
   push:
-    branches: [ branch ]
+    branches: [ deploy ]
     
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
@@ -20,7 +20,7 @@ jobs:
       - name: Checkout from master branch
         uses: actions/checkout@v1
         with: 
-          ref: 'branch'
+          ref: 'deploy'
       # Configuration on Ubuntsu
       - name: Configuration on Ubuntu 18.04
         uses: actions/setup-node@v1
@@ -46,7 +46,7 @@ jobs:
         run: |
           git config --local user.name "${GITHUB_USER}"
           git config --local user.email "${GITHUB_EMAIL}"
-          git remote set-url origin git@github.com:ns2039/day6.git
+          git remote set-url origin git@github.com:ns2039/gityb_actions.git
           git add -f docs
           git commit -m "auto deploy"
           git push -f origin HEAD:branch
