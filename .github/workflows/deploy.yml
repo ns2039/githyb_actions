@@ -3,7 +3,7 @@
 name: deploy_automation
 
 # Controls when the action will run. Triggers the workflow on push or pull request 
-# events but only for the master branch
+# events but only for the deploy branch
 on: 
   push:
     branches: [ deploy ]
@@ -17,7 +17,7 @@ jobs:
     steps:
       # The type of runner that the job will run on
       # checkout branch
-      - name: Checkout from master branch
+      - name: Checkout from deploy branch
         uses: actions/checkout@v1
         with: 
           ref: 'deploy'
