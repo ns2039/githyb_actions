@@ -15,7 +15,7 @@ $ yarn dev
 $ yarn build
 $ yarn start
 
-# generate static projecthogehogehogehogehogehoehojhogefafafafsfa
+# generate static projecthogehogehogehogehogehoehojhogefafafafsfafafaa
 $ yarn generate
 ```
 
