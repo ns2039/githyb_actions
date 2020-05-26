@@ -1,0 +1,52 @@
+  
+# This is a basic workflow to help you get started with Actions
+name: deploy_automation
+
+# Controls when the action will run. Triggers the workflow on push or pull request 
+# events but only for the deploy branch
+on: 
+  push:
+    branches: [ deploy ]
+    
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+jobs:
+  build:        
+  # The type of runner that the job will run on
+    runs-on: ubuntu-18.04
+  # Steps represent a sequence of tasks that will be executed as part of the job
+    steps:
+      # The type of runner that the job will run on
+      # checkout branch
+      - name: Checkout from deploy branch
+        uses: actions/checkout@v1
+        with: 
+          ref: 'branch'
+      # Configuration on Ubuntsu
+      - name: Configuration on Ubuntu 18.04
+        uses: actions/setup-node@v1
+        with:
+          node-versoin: '10.x'
+
+      # Deploy Configuration(SSH key settings)
+      - name: Deploy configuration
+        run: |
+          mkdir ~/.ssh
+          ssh-keyscan -t rsa github.com >> ~/.ssh/known_hosts
+          echo "${{ secrets.ACTIONS_DEPLOY_KEY }}" > ~/.ssh/id_rsa
+          chmod 400 ~/.ssh/id_rsa
+      # Build abd Deployment
+      - name: Build
+        run: |
+          yarn install
+          yarn generate
+      - name: Push to GitHub
+        env: 
+          GITHUB_USER: "ns2039"
+          GITHUB_EMAIL: "syogo.ninomiya@kikagaku.co.jp"
+        run: |
+          git config --local user.name "${GITHUB_USER}"
+          git config --local user.email "${GITHUB_EMAIL}"
+          git remote set-url origin git@github.com:ns2039/githyb_actions.git
+          git add -f docs
+          git commit -m "auto deploy"
+          git push -f origin HEAD:deploy
